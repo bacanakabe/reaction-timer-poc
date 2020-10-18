@@ -5,13 +5,21 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(14px + 2vmin);
   color: white;
   text-align: center;
 }
 
+.app p{
+  font-size: calc(14pt + 2vmin);
+}
+
+.start-game{
+  background: #c53a3a;
+  min-height: 100vh;
+}
+
 .click{
-  background: #d45b5b;
+  background: #4bc151;
   min-height: 100vh;
 }
 
@@ -35,7 +43,8 @@ input[type=button]{
   border: none;
   color: white;
   padding: 25px 50px;
-  margin: 4px 2px;
   cursor: pointer;
-  font-size: calc(10px + 2vmin);
+  font-size: calc(12pt + 2vmin);
+  -webkit-appearance: none;
+  -webkit-border-radius: 0;
 }

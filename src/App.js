@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import img from './img.jpg';
+import React, { useState } from 'react';
 import './App.css';
 
 function App() {
@@ -25,19 +24,11 @@ function App() {
   const [startTime, setStartTime] = useState(null);
   const [reactionTime, setReactionTime] = useState(null);
   const minTimeInterval = minFromQueryParam != null ? minFromQueryParam : 2000; // in milliseconds
-  const maxTimeInterval = maxFromQueryParam != null ? maxFromQueryParam : 6000; // in milliseconds
+  const maxTimeInterval = maxFromQueryParam != null ? maxFromQueryParam : 10000; // in milliseconds
   const [waitTime, setWaitTime] = useState(0); // in milliseconds
-
-  useEffect(() => {
-    console.log(minFromQueryParam);
-    console.log(maxFromQueryParam);
-  }, []);
 
   const getWaitTime = () => {
     let waitTime = Math.random() * (maxTimeInterval - minTimeInterval) + minTimeInterval;
-    console.log(`The wait time is ${waitTime}`);
-    console.log(`the mininterval is ${minTimeInterval}`);
-    console.log(`the max time is ${maxTimeInterval}`);
     return waitTime;
   };
 
@@ -71,11 +62,11 @@ function App() {
 
   return (
     <>
-    {
+      {
         lostScreen &&
         <div className="app" id="app">
           <p>
-            You clicked too soon, loser... 😭
+            You clicked too soon, loser... <span role="img" aria-label="Crying emoji">😭</span>
           </p>
           <input type="button" value="Start game" onClick={startGame} />
         </div>
@@ -96,18 +87,18 @@ function App() {
       }
       {
         gameStarted &&
-        <div className="click" onClick={captureLoss}>
+        <div className="start-game" onClick={captureLoss}>
           <p className="game-instructions">
-            Click anywhere when the image appears...
+            Click anywhere when the screen turns green...
           </p>
         </div>
       }
       {
-        click == true &&
-        <div className="app" onClick={captureReaction}>
-          <div className="reaction-image-container">
-            <img src={img} className="reaction-image" />
-          </div>
+        click === true &&
+        <div className="click" onClick={captureReaction}>
+          <p className="game-instructions">
+            Click now!
+          </p>
         </div>
       }
     </>
