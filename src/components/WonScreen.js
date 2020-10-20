@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 
 const WonScreen = (props) => {
     const [text, setText] = useState("");
-    console.log(props.reactionTime);
 
     useEffect(() => {
         if (props.reactionTime >= 1000) {
