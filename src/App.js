@@ -13,11 +13,27 @@ const LostScreen = (props) => {
 }
 
 const WonScreen = (props) => {
+  const [text, setText] = useState("");
+  console.log(props.reactionTime);
+
+  useEffect(() => {
+    if (props.reactionTime >= 1000) {
+      setText(`Abooow, that's slow. 🐌 ${props.reactionTime} ms (milliseconds)`);
+    }
+    else if (props.reactionTime < 400) {
+      setText(`Wow, that's fast! ⚡️ ${props.reactionTime} ms (milliseconds)`);
+    }
+    else {
+      setText(`Your reaction time was ${props.reactionTime} ms (milliseconds)`);
+    }
+  }, [props.reactionTime]);
+
+
+  // }
+
   return (
     <div className="app" id="app">
-      <p>
-        Your reaction time was {props.reactionTime} ms (milliseconds)
-      </p>
+      <p>{text}</p>
       <input type="button" value="Start game" onClick={props.startGame} />
     </div>
   );
@@ -127,7 +143,7 @@ const App = () => {
 
   const startGame = () => {
     setGameStarted(true);
-    setWaitTime(getWaitTime());    
+    setWaitTime(getWaitTime());
   };
 
   useEffect(() => {
