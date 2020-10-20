@@ -75,10 +75,8 @@ const ResultScreen = (props) => {
 
 const Screen = (props) => {
   if (!props.click && !props.gameStarted && !props.lostScreen && props.reactionTime === null) {
-    console.log("welcome");
     return <WelcomeScreen {...props}></WelcomeScreen>
   } else if (props.gameStarted) {
-    console.log("instructions");
     return <InstructionsScreen {...props}></InstructionsScreen>
   } else {
     return null;
@@ -133,7 +131,6 @@ const App = () => {
   };
 
   useEffect(() => {
-    console.log("qweqwe");
     if (gameStarted) {
       setTimer(
         setTimeout(function () {
@@ -147,7 +144,6 @@ const App = () => {
 
   useEffect(() => {
     if ((lost === true || reactionTime !== null) && !gameStarted) {
-      console.log("clear timeout");
       clearTimeout(timer);
     }
   }, [lost, reactionTime, timer, gameStarted]);
@@ -159,7 +155,6 @@ const App = () => {
   }
 
   const captureLoss = () => {
-    console.log("loss");
     setReactionTime(null);
     setGameStarted(false);
     setLost(true);
