@@ -1,131 +1,12 @@
-import React, { useState, useEffect, memo } from 'react';
+import React, { useState, useEffect } from 'react';
+import GameComponent from './components/GameComponent';
+import getPositiveIntFromQueryParam from './utils/numberUtil';
 import './App.css';
 
-const LostScreen = (props) => {
-  return (
-    <div className="app" id="app">
-      <p>
-        You clicked too soon, loser... <span role="img" aria-label="Crying emoji">😭</span>
-      </p>
-      <input type="button" value="Start game" onClick={props.startGame} />
-    </div>
-  );
-}
-
-const WonScreen = (props) => {
-  const [text, setText] = useState("");
-  console.log(props.reactionTime);
-
-  useEffect(() => {
-    if (props.reactionTime >= 1000) {
-      setText(`Abooow, that's slow. 🐌 ${props.reactionTime} ms (milliseconds)`);
-    }
-    else if (props.reactionTime < 400) {
-      setText(`Wow, that's fast! ⚡️ ${props.reactionTime} ms (milliseconds)`);
-    }
-    else {
-      setText(`Your reaction time was ${props.reactionTime} ms (milliseconds)`);
-    }
-  }, [props.reactionTime]);
-
-
-  // }
-
-  return (
-    <div className="app" id="app">
-      <p>{text}</p>
-      <input type="button" value="Start game" onClick={props.startGame} />
-    </div>
-  );
-}
-
-const WelcomeScreen = (props) => {
-  return (
-    <>
-      <div className="app">
-        <input type="button" value="Start game" onClick={props.startGame} />
-      </div>
-    </>
-  );
-}
-
-const InstructionsScreen = (props) => {
-  return (
-    <div className="start-game" onClick={props.captureLoss}>
-      <p className="game-instructions">
-        Click anywhere when the screen turns green...
-        </p>
-    </div>
-  );
-};
-
-const GameScreen = (props) => {
-  if (props.gameStarted === false && props.click === true) {
-    return (
-      <>
-        {
-          props.click === true &&
-          <div className="click" onClick={props.captureReaction}>
-            <p className="game-instructions">
-              Click now!
-            </p>
-          </div>
-        }
-      </>
-    );
-  } else {
-    return null;
-  }
-};
-
-const ResultScreen = (props) => {
-  if (props.reactionTime != null && !props.click && !props.gameStarted) {
-    return <WonScreen reactionTime={props.reactionTime} startGame={props.startGame} />
-  } else {
-    if (!props.gameStarted && props.lostScreen) {
-      return <LostScreen startGame={props.startGame} />
-    }
-  }
-  return null;
-};
-
-const Screen = (props) => {
-  if (!props.click && !props.gameStarted && !props.lostScreen && props.reactionTime === null) {
-    return <WelcomeScreen {...props}></WelcomeScreen>
-  } else if (props.gameStarted) {
-    return <InstructionsScreen {...props}></InstructionsScreen>
-  } else {
-    return null;
-  }
-};
-
-const GameComponent = memo(props => {
-  return (
-    <>
-      <Screen {...props}></Screen>
-      <GameScreen {...props} />
-      <ResultScreen {...props} />
-    </>
-  );
-});
-
 const App = () => {
-  const getPositiveIntFromQueryParam = (param) => {
-    let numberFromQueryParam = queryParams.has(param) ? queryParams.get(param) : null;
-    if (numberFromQueryParam && !isNaN(numberFromQueryParam)) {
-      numberFromQueryParam = parseInt(numberFromQueryParam);
-
-      if (numberFromQueryParam < 0) {
-        numberFromQueryParam = null;
-      } else {
-        numberFromQueryParam *= 1000; // convert to milliseconds
-      }
-    }
-    return numberFromQueryParam;
-  }
   const queryParams = new URLSearchParams(window.location.search);
-  const minFromQueryParam = getPositiveIntFromQueryParam("min");
-  const maxFromQueryParam = getPositiveIntFromQueryParam("max");
+  const minFromQueryParam = getPositiveIntFromQueryParam(queryParams, "min");
+  const maxFromQueryParam = getPositiveIntFromQueryParam(queryParams, "max");
   const [gameStarted, setGameStarted] = useState(false);
   const [lost, setLost] = useState(false);
   const [click, setClick] = useState(false);
@@ -146,6 +27,7 @@ const App = () => {
     setWaitTime(getWaitTime());
   };
 
+  // enable the game screen for the user to click
   useEffect(() => {
     if (gameStarted) {
       setTimer(
@@ -158,6 +40,7 @@ const App = () => {
     }
   }, [gameStarted, waitTime, lost, reactionTime, click]);
 
+  // clear the timer to avoid setting the game screen if the user has lost already
   useEffect(() => {
     if ((lost === true || reactionTime !== null) && !gameStarted) {
       clearTimeout(timer);
