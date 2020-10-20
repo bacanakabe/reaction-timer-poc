@@ -9,6 +9,10 @@
   text-align: center;
 }
 
+.hide {
+  display: none;
+}
+
 .app p{
   font-size: calc(14pt + 2vmin);
 }
